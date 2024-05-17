@@ -1,0 +1,14 @@
+{
+  "name": "FreeTouchDeck",
+  "version": "0.9.17",
+  "new_install_prompt_erase": false,
+  "builds": [
+    {
+      "chipFamily": "ESP32",
+      "parts": [
+        { "path": "ESP32TouchDown.bin", "offset": 0 }
+      
+      ]
+    }
+  ]
+}

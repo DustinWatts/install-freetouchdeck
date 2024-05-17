@@ -1,0 +1,182 @@
+<html style="font-size: 16px; font-family: Roboto, Arial, sans-serif">
+  <head>
+    <script
+      type="module"
+      src="./webtools/install-button.js?module"
+    ></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <style>
+      a:link,
+      a:visited {
+        color: #176bd1;
+      }
+      a:hover {
+        color: #9dbef2;
+      }
+    </style>
+  </head>
+
+  <body onload="checkSupported();getlatest();">
+    <br />
+
+    <div
+      style="
+        font-size: 24px;
+        font-weight: bold;
+        width: 50%;
+        margin: auto;
+        text-align: center;
+      "
+      id="div-title"
+    >
+      FreeTouchDeck Web Installer
+    </div>
+
+    <div style="width: 50%; margin: auto" id="main-content">
+      <div style="margin: auto" id="intro"></div>
+
+      <div style="margin: auto; text-align: left" id="install-content">
+        <h3>Install FreeTouchDeck for:</h3>
+        <label>
+          <input
+            type="checkbox"
+            id="devkitselect"
+            name="group1[]"
+            onclick="updateManifest('espdevkit');"
+          />ESP32 DevKitC</label
+        ><br />
+        <label>
+          <input
+            type="checkbox"
+            id="touchdownselect"
+            name="group1[]"
+            onclick="updateManifest('esp32touchdown');"
+          />ESP32 TouchDown</label
+        ><br />
+        <label>
+          <input
+            type="checkbox"
+            id="devkits3select"
+            name="group1[]"
+            onclick="updateManifest('espdevkits3');"
+          />ESP32-S3-DevKitC-1 (Using USB keyboard)</label
+        ><br />
+        <label>
+          <input
+            type="checkbox"
+            id="devkits3bleselect"
+            name="group1[]"
+            onclick="updateManifest('espdevkits3ble');"
+          />ESP32-S3-DevKitC-1 (Using BLE keyboard)</label
+        ><br /><br />
+
+        <div>
+          <esp-web-install-button
+            id="installbutton"
+            manifest=""
+          ></esp-web-install-button>
+        </div>
+
+        <div id="noboardselected">
+          <i
+            >Please select a board for installation so we can connect to it...</i>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      $('input[type="checkbox"]').on('change', function () {
+        $('input[name="' + this.name + '"]')
+          .not(this)
+          .prop('checked', false);
+      });
+
+      var installbutton = document.getElementById('installbutton');
+      var devkitselect = document.getElementById('devkitselect');
+      var touchdownselect = document.getElementById('touchdownselect');
+      var devkits3select = document.getElementById('devkits3select');
+      var devkits3bleselect = document.getElementById('devkits3bleselect');
+
+      function updateManifest(url) {
+        installbutton.removeAttribute('manifest');
+        var url = `https://install.freetouchdeck.com/firmware/${url}/manifest.json`;
+        installbutton.setAttribute('manifest', url);
+        showHideInstallButton();
+      }
+
+      function showHideInstallButton() {
+        if (
+          $('#devkitselect').is(':checked') ||
+          $('#touchdownselect').is(':checked') ||
+          $('#devkits3select').is(':checked') ||
+          $('#devkits3bleselect').is(':checked')
+        ) {
+          $('#installbutton').show();
+          $('#noboardselected').hide();
+        } else {
+          $('#installbutton').hide();
+          $('#noboardselected').show();
+        }
+      }
+
+      showHideInstallButton();
+
+      function checkSupported() {
+        if (
+          document
+            .getElementById('installbutton')
+            .hasAttribute('install-unsupported')
+        ) {
+          var notsupportedhtml =
+            "<center><br><br>Hmm, your browser is not yet supported!<br><br>If you use <a href='https://www.google.com/intl/nl_nl/chrome/' target='_blank'>Desktop Chrome</a> or <a href='https://www.microsoft.com/nl-nl/edge' target='_blank' >Edge</a> this is what is waiting for you...<br><br>";
+
+          notsupportedhtml +=
+            '<iframe id="ytplayer" type="text/html" width="640" height="360" src="https://www.youtube.com/embed/aV3pNWCgVys?autoplay=1&controls=0&mute=1&enablejsapi=1&modestbranding=1&rel=0&origin=https://install.freetouchdeck.com" frameborder="0"></iframe>';
+
+          notsupportedhtml += '</center>';
+
+          document.getElementById('main-content').innerHTML = notsupportedhtml;
+        }
+      }
+
+      async function getlatest() {
+        const response = await fetch(
+          'https://api.github.com/repos/DustinWatts/FreeTouchDeck/releases/latest'
+        );
+        const data = await response.json();
+
+        var version = data.tag_name;
+
+        console.log(version);
+
+        var content = `
+
+      <br />
+      <br />
+      Welcome to the FreeTouchDeck web installer. This will install
+      <a href="https://github.com/DustinWatts/FreeTouchDeck" target="_blank"
+        >FreeTouchDeck</a
+      >
+      version ${version} straight from your browser. No need for downloading and
+      compiling! <br /><br />Simply select which board you want to program, then
+      plug in the board to the USB port of your computer and click "connect".
+      Then a window pops where you can select the COM port where your board is
+      connected to. Select the one with <i>"CP210*"</i> and click "Connect".
+      Another option is to first hit "Connect" and then plug in the board. A new
+      device will pop up in the list, now you know for sure which is your board.
+      <br /><br />After that click "Install FreeTouchDeck" to start the
+      installation.<br /><br />This web installer currently only supports
+      Chrome, Edge and Opera. It uses
+      <a href="https://github.com/esphome/esp-web-tools" target="_blank"
+        >ESP Web Tools</a
+      >
+      by <a href="https://esphome.io/" target="_blank">ESPHome</a>.
+
+      <br />
+      <br />`;
+
+        document.getElementById('intro').innerHTML = content;
+      }
+    </script>
+  </body>
+</html>
