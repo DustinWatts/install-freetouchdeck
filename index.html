@@ -99,7 +99,7 @@
 
       function updateManifest(url) {
         installbutton.removeAttribute('manifest');
-        var url = `https://install.freetouchdeck.com/firmware/${url}/manifest.json`;
+        var url = `https://github.com/DustinWatts/install-freetouchdeckfirmware/${url}/manifest.json`;
         installbutton.setAttribute('manifest', url);
         showHideInstallButton();
       }
@@ -131,7 +131,7 @@
             "<center><br><br>Hmm, your browser is not yet supported!<br><br>If you use <a href='https://www.google.com/intl/nl_nl/chrome/' target='_blank'>Desktop Chrome</a> or <a href='https://www.microsoft.com/nl-nl/edge' target='_blank' >Edge</a> this is what is waiting for you...<br><br>";
 
           notsupportedhtml +=
-            '<iframe id="ytplayer" type="text/html" width="640" height="360" src="https://www.youtube.com/embed/aV3pNWCgVys?autoplay=1&controls=0&mute=1&enablejsapi=1&modestbranding=1&rel=0&origin=https://install.freetouchdeck.com" frameborder="0"></iframe>';
+            '<iframe id="ytplayer" type="text/html" width="640" height="360" src="https://www.youtube.com/embed/aV3pNWCgVys?autoplay=1&controls=0&mute=1&enablejsapi=1&modestbranding=1&rel=0&origin=https://github.com/DustinWatts/install-freetouchdeck" frameborder="0"></iframe>';
 
           notsupportedhtml += '</center>';
 
